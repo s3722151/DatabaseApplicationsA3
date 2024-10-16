@@ -1,3 +1,8 @@
+/*
+Purpose: Contains files that define how the server responds to different requests 
+(like visiting a page or submitting a form).
+*/
+
 const express = require('express');
 const router = express.Router();
 const Booking = require('../models/booking');

@@ -12,17 +12,28 @@
         </header>
 
         <ul>
-            <li><a class="active" href="index.html">Homepage</a></li>
-            <li><a href="bookings.html">Booking Page</a></li>
+            <li><a  href="index.html">Homepage</a></li>
+            <li><a class="active"href="bookings.html">Booking Page</a></li>
         </ul>
 
         <section class="topSection">
-            This is text for the top section.
+            <h2>Let's book the property</h2>
+            <form action="confirmation.html" method="POST">
+                <fieldset>
+                    <h3>Booking Details</h3>
+                    <div class="divForm"> <label>Check In:</label><input type="text" id='checkIn' name="checkIn" required> </div>
+                    <div class="divForm"> <label>Check Out</label><input type="text" id='checkOut' name="checkOut" required> </div>
+                    <h3>Your Details</h3>
+                    <div class="divForm"> <label>Your Name</label><input type="text" id='yourName' name="yourName" required> </div>
+                    <div class="divForm"> <label>Email Address</label><input type="text" id='emailAddress' name="emailAddress" required></div>
+                    <div class="divForm"> <label>Your Mobile No:</label><input type="text" id='mobileNo' name="mobileNo" required></div>
+                    <div class="divForm"> <label>Postal Address</label><input type="text" id='postalAddress' name="postalAddress" required></div>
+                    <div class="divForm"> <label>Residential Address</label><input type="text" id='residentialAddress' name="residentialAddress" required></div>
+                    <button input type="submit">Book Now</button>
+                </fieldset>
+            </form>
         </section>
 
-        <section class="bottomSection">
-            This is text for the bottom section.
-        </section>
     
 </body>
 
