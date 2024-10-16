@@ -1,0 +1,18 @@
+{
+  "name": "databaseapplicationsa3",
+  "version": "1.0.0",
+  "description": "This is an assignment where I combine the use of using MongoDB, making a Web Application and presumably use sharding.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  //This is what is installed 
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.1",
+    "mongoose": "^8.7.1"
+  }
+}

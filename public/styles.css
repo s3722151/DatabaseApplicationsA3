@@ -1,0 +1,97 @@
+/* https: //www.w3schools.com/html/html_css.asp */
+header {
+    text-align: center;
+    /* Centers the content horizontally */
+    padding-left: 20px;
+    /* Adjust the padding as needed */
+    padding-right: 20px;
+    /* Adjust the padding as needed */
+    background-color: rgb(255, 99, 71);
+}
+/* https: //www.w3schools.com/css/tryit.asp?filename=trycss_navbar_horizontal_dividers */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+    border-right: 1px solid #bbb;
+}
+
+li:last-child {
+    border-right: none;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #04AA6D;
+}
+
+
+/*-------------------------- BODY ------------------------------------------- */
+h1 {
+    color: black;
+    /* Sets the text color to blue */
+    font-family: verdana;
+    /* Uses Verdana font */
+    font-size: 300%;
+    /* Sets the font size to 300% */
+}
+
+.topSection {
+    color: black;
+    /* Sets the text color to blue */
+    font-family: verdana;
+    /* Uses Verdana font */
+    font-size: 100%;
+    /* Sets the font size to 300% */
+    background-color: grey;
+    padding: 50px 50px 50px 50px;
+    margin: 20px 40px 20px 40px;
+}
+
+
+/* 
+HOMEPAGE - DROPDOWN
+*/
+.topSection{
+color: black;/* Sets the text color to blue */
+font-family: verdana; /* Uses Verdana font */
+font-size: 100%; /* Sets the font size to 300% */
+background-color: grey;
+height: 30em;
+padding: 50px 50px 50px 50px;
+margin: 20px 40px 20px 40px;
+}
+
+
+
+/* 
+HOMEPAGE - DISPLAY RANDOM LISTINGS 
+*/
+.bottomSection {
+color: black;    /* Sets the text color to blue */
+font-family: verdana;/* Uses Verdana font */
+font-size: 100%;    /* Sets the font size to 300% */
+background-color: grey;
+height: 20em;
+padding: 50px 50px 50px 50px;
+margin: 20px 40px 20px 40px;
+}
+
+
