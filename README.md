@@ -28,12 +28,22 @@ Models: Defines the structure of the data that your application uses (like a blu
     Examples: Schemas: Files that specify what data to expect from the client (like user information) and how to validate that data (like ensuring an email is in the correct format).
 
 
-
-
-Research
+Referencing guide
 https://www.lib.rmit.edu.au/easy-cite/?styleguide=styleguide-6#stn-0
-//Understand 'url module
-https://www.codecademy.com/learn/learn-node-js/modules/intro-to-node-js/cheatsheet
+Research
+//Tutorials for Node
+https://www.youtube.com/watch?v=JZXQ455OT3A 
+    //How to Connect Node.js and MongoDB: Building a Dynamic Web Application
+    https://www.youtube.com/watch?v=NQiFuoX949k
+//Modules
+    // Include path as a module: To avoid hard coding paths, looking at if a path exists (existsSync)
+    https://youtu.be/yQBw8skBdZU?list=PL0Zuz27SZ-6PFkIxaJ6Xx_X46avTM1aYw&t=403 
+    //Understand 'url module
+    https://www.codecademy.com/learn/learn-node-js/modules/intro-to-node-js/cheatsheet
+//What is NPM
+https://www.youtube.com/watch?v=oGO_-DWTmKA&list=PL0Zuz27SZ-6PFkIxaJ6Xx_X46avTM1aYw&index=3
+    //Where to get packages
+    https://www.npmjs.com/
 
 Step 3
 https://www.geeksforgeeks.org/folder-structure-for-a-node-js-project/

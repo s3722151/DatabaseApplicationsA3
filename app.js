@@ -3,6 +3,8 @@ What this file is:
     The main file where everything starts. 
     It sets up the server and connects all parts of the application.
 */
+
+//List of modules
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
