@@ -53,45 +53,38 @@ h1 {
     /* Sets the font size to 300% */
 }
 
-.topSection {
-    color: black;
-    /* Sets the text color to blue */
-    font-family: verdana;
-    /* Uses Verdana font */
-    font-size: 100%;
-    /* Sets the font size to 300% */
-    background-color: grey;
-    padding: 50px 50px 50px 50px;
-    margin: 20px 40px 20px 40px;
-}
-
 
 /* 
 HOMEPAGE - DROPDOWN
 */
-.topSection{
-color: black;/* Sets the text color to blue */
-font-family: verdana; /* Uses Verdana font */
-font-size: 100%; /* Sets the font size to 300% */
-background-color: grey;
-height: 30em;
-padding: 50px 50px 50px 50px;
-margin: 20px 40px 20px 40px;
+.topSection {
+    color: black;
+    font-family: verdana;
+    font-size: 100%;
+    background-color: grey;
+    /* Adjust or remove fixed height */
+    height: auto;
+    /* Allow it to expand as needed */
+    padding: 50px;
+    margin: 20px 40px 20px 40px;
 }
 
 
-
-/* 
-HOMEPAGE - DISPLAY RANDOM LISTINGS 
-*/
+/* HOMEPAGE - DISPLAY RANDOM LISTINGS */
 .bottomSection {
-color: black;    /* Sets the text color to blue */
-font-family: verdana;/* Uses Verdana font */
-font-size: 100%;    /* Sets the font size to 300% */
-background-color: grey;
-height: 20em;
-padding: 50px 50px 50px 50px;
-margin: 20px 40px 20px 40px;
+    color: black;
+    font-family: verdana;
+    font-size: 100%;
+    background-color: grey;
+    /* Remove or adjust the fixed height */
+    height: auto;
+    /* Adjust as needed, or use max-height instead */
+    padding: 50px 50px 50px 50px;
+    margin: 20px 40px 20px 40px;
+    /* Ensure scrolling if content exceeds visible area */
+    overflow-y: auto;
+    max-height: 40em;
+    /* Set a maximum height if needed */
 }
 
-
+       

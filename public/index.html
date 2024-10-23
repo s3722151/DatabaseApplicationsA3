@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="public/styles.css">
 </head>
 
 <body>
@@ -18,14 +18,14 @@
         <li><a href="bookings.html">Booking Page</a></li>
     </ul>
 
-
     <section class="topSection">
-            <form action="index.html" method="POST">
-                <fieldset>
-                    <h3>Listings?</h3>
-                    <div class="divForm"> <label>Location</label><input type="text" id='location' name="location" required> </div>
-                    <div class="divForm"><label>Type of property</label>
-                        <select>
+        <form action="index.html" method="POST">
+            <fieldset>
+                <h3>Listings?</h3>
+                <div class="divForm"><label>Location</label><input type="text" id='location' name="location" required>
+                </div>
+                <div class="divForm"><label>Type of property</label>
+                    <select>
                         <option value="House">House</option>
                         <option value="Camper/RV">Camper/RV</option>
                         <option value="Cottage">Cottage</option>
@@ -48,44 +48,42 @@
                         <option value="Earth house">Earth house</option>
                         <option value="Heritage hotel">Heritage hotel (India)</option>
                         <option value="Hostel">Hostel</option>
-                        </select>
-                    </div>
-                    <div class="divForm"><label>Number of bedrooms</label>
-                        <select>
-                            <option value=1>1</option>
-                            <option value=2>2</option>
-                            <option value=3>3</option>
-                            <option value=4>4</option>
-                            <option value=5>5</option>
-                            <option value=6>6</option>
-                            <option value=7>7</option>
-                            <option value=8>8</option>
-                            <option value=9>9</option>
-                            <option value=10>10</option>
-                            <option value=11>11</option>
-                            <option value=12>12</option>
-                            <option value=13>13</option>
-                            <option value=14>14</option>
-                            <option value=15>15</option>
-                            <option value=16>16</option>
-                            <option value=17>17</option>
-                            <option value=18>18</option>
-                            <option value=19>19</option>
-                            <option value=20>20</option>
-                        </select>
-                    </div>
-                    <button input type="submit">Submit</button>
-                </fieldset>
-            </form>
-        
+                    </select>
+                </div>
+                <div class="divForm"><label>Number of bedrooms</label>
+                    <select>
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6>6</option>
+                        <option value=7>7</option>
+                        <option value=8>8</option>
+                        <option value=9>9</option>
+                        <option value=10>10</option>
+                        <option value=11>11</option>
+                        <option value=12>12</option>
+                        <option value=13>13</option>
+                        <option value=14>14</option>
+                        <option value=15>15</option>
+                        <option value=16>16</option>
+                        <option value=17>17</option>
+                        <option value=18>18</option>
+                        <option value=19>19</option>
+                        <option value=20>20</option>
+                    </select>
+                </div>
+                <button input type="submit">Submit</button>
+            </fieldset>
+        </form>
     </section>
-    
+
     <section class="bottomSection">
-        This is for some random listings. 
+        This is for some random listings.
     </section>
 
-
-
+    <script src="public/index.js"></script>
 </body>
 
 </html>
