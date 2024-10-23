@@ -16,6 +16,11 @@ async function fetchRandomListings() {
 // Function to display listings in the bottom section
 function displayListings(listings) {
     const bottomSection = document.getElementById('bottomSection');
+    const listingsCount = document.getElementById('listingsCount');
+
+    // Update the count of listings
+    listingsCount.innerText = `${listings.length} Listings match your preferences`;
+
     bottomSection.innerHTML = ''; // Clear existing content
 
     listings.forEach(listing => {
@@ -27,6 +32,7 @@ function displayListings(listings) {
         const listingLink = document.createElement('a');
         listingLink.href = `bookings.html?listing_id=${listing._id}`; // URL with listing ID
         listingLink.innerText = listing.name; // Listing name as hyperlink
+        listingLink.className = 'active'; // Add class for active styling
 
         // Create listing summary
         const summary = document.createElement('p');
