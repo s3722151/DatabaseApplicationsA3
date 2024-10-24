@@ -18,7 +18,8 @@ Fortunately I already installed it in advance.
 
 2. Download the necessary packages
 - express, npm init -y, mongoose
-What is node: https://www.w3schools.com/nodejs/nodejs_intro.asp 
+What is node: https://www.w3schools.com/nodejs/nodejs_intro.asp
+    https://www.youtube.com/watch?v=bxsemcrY4gQ
 What is express: https://www.simplilearn.com/tutorials/nodejs-tutorial/what-is-express-js 
     https://www.reddit.com/r/javascript/comments/36sef5/what_is_expressjs_exactly_i_keep_hearing_nodejs/ 
 Work with mongoose: https://www.geeksforgeeks.org/npm-mongoose/
@@ -32,10 +33,19 @@ Models: Defines the structure of the data that your application uses (like a blu
 
 
 4. Make the files (index.html,booking.html, confirmation.html)
+- Just use HW3SCHOOLs
 
 5. Make a connection to MongoDB
 - This is by creatiing a file, server.js to run the whole application 
 - Creating index.js 
+- Tutorials and Web Materials 
+
+6. Make the page view randomised results first 
+- My reasoning for this is that if I build it first, I can then build the user input on top then make a function later
+ to proceed to booking page. 
+- Issue with retriving the price as embedded in array - possible solution was to use Model
+    https://youtu.be/bxsemcrY4gQ
+    NVM: There is a toString()
 
 6. INDEX.html: Make the index file have GET's randomised listsings
 - I get because it is okay to cache random listings

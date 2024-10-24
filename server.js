@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
-const http = require('http');
-const fs = require('fs');
+const http = require('http'); //We do this as node files must be initiated on server before having any effect: https://www.w3schools.com/nodejs/nodejs_http.asp
+const fs = require('fs'); //https://www.w3schools.com/nodejs/nodejs_filesystem.asp
 const path = require('path');
 
 // MongoDB connection URI
@@ -8,6 +8,7 @@ const uri = 'mongodb+srv://s3722151:Gatesea3@assignment3cluster.kbysd.mongodb.ne
 const client = new MongoClient(uri);
 
 // Create an HTTP server
+//https://www.w3schools.com/nodejs/nodejs_http.asp
 const server = http.createServer(async (req, res) => {
     console.log(`Received request for: ${req.url}`);
 
@@ -27,13 +28,27 @@ const server = http.createServer(async (req, res) => {
         serveFile(res, 'public/index.html', 'text/html');
     } else if (req.url === '/random-listings') {
         try {
-            await client.connect();
-            const database = client.db('sample_airbnb');
-            const collection = database.collection('listingsAndReviews');
+            await client.connect();//First connect to the connection string
+            const database = client.db('sample_airbnb'); //Connect to the database
+            const collection = database.collection('listingsAndReviews');//Connect to the collection
+
+            //This is the randomise function. 
             const randomListings = await collection.aggregate([
-                { $sample: { size: 5 } },
+                { $sample: { size: 3 } },
                 { $project: { name: 1, summary: 1, price: 1, "review_scores.review_scores_rating": 1 } }
             ]).toArray();
+
+            //There was an issue here. $Object $Object
+            randomListings.forEach(listing => {
+                if (listing.price && listing.price._bsontype === 'Decimal128') {
+                    listing.price = listing.price.toString(); // Convert Decimal128 to string
+                    console.log('Converted price:', listing.price); // Check if conversion happens
+                }
+            });            
+            console.log('Fetched random listings:', randomListings);
+
+                       
+            //To convert cursor into a array of documents  NOT store data in a array
             console.log('Fetched random listings:', randomListings);
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(randomListings));
@@ -61,7 +76,7 @@ function serveFile(res, filePath, contentType) {
     });
 }
 
-// Start the server
+// Start the server - calls upon const server. Specifying port
 server.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
