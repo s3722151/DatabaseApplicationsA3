@@ -71,9 +71,8 @@ Models: Defines the structure of the data that your application uses (like a blu
 
 7. To add a booking to the database when you submit from booking page
 
-
-8.Make a listing clickable
-- This should lead to the 
+OPTIONAL:
+- Make proper error messages
 
 
 

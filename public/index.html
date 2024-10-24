@@ -19,35 +19,53 @@
 
     <section class="topSection">
         <form action="index.html" method="POST">
-            <fieldset>
+            
                 <h3>Listings?</h3>
-                <div class="divForm"><label>Location</label><input type="text" id='location' name="location" required>
+                <div class="divForm"><label>Location</label><input type="text" id='location' placeholder ="Name of listing E.g By Happy in Porto"name="location" required>
                 </div>
-                <div class="divForm"><label>Type of property</label>
-                    <select>
-                        <option value="House">House</option>
-                        <option value="Camper/RV">Camper/RV</option>
-                        <option value="Cottage">Cottage</option>
-                        <option value="Apartment">Apartment</option>
-                        <option value="Farm stay">Farm stay</option>
-                        <option value="Houseboat">Houseboat</option>
-                        <option value="Chalet">Chalet</option>
-                        <option value="Aparthotel">Aparthotel</option>
-                        <option value="Castle">Castle</option>
-                        <option value="Guesthouse">Guesthouse</option>
-                        <option value="Townhouse">Townhouse</option>
-                        <option value="Nature lodge">Nature lodge</option>
-                        <option value="Service apartment">Serviced apartment</option>
-                        <option value="Cabin">Cabin</option>
-                        <option value="Loft">Loft</option>
-                        <option value="Guest suite">Guest suite</option>
-                        <option value="Bungalow">Bungalow</option>
-                        <option value="Case particular">Case particular (Cuba)</option>
-                        <option value="Train">Train</option>
-                        <option value="Earth house">Earth house</option>
-                        <option value="Heritage hotel">Heritage hotel (India)</option>
-                        <option value="Hostel">Hostel</option>
-                    </select>
+            <div class="divForm"><label>Type of property</label>
+                <select>
+                    <option value="" disabled selected>Select a property type</option>
+                    <option value="House">House</option>
+                    <option value="Camper/RV">Camper/RV</option>
+                    <option value="Cottage">Cottage</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Farm stay">Farm stay</option>
+                    <option value="Houseboat">Houseboat</option>
+                    <option value="Chalet">Chalet</option>
+                    <option value="Aparthotel">Aparthotel</option>
+                    <option value="Castle">Castle</option>
+                    <option value="Guesthouse">Guesthouse</option>
+                    <option value="Townhouse">Townhouse</option>
+                    <option value="Nature lodge">Nature lodge</option>
+                    <option value="Serviced apartment">Serviced apartment</option>
+                    <option value="Cabin">Cabin</option>
+                    <option value="Loft">Loft</option>
+                    <option value="Guest suite">Guest suite</option>
+                    <option value="Bungalow">Bungalow</option>
+                    <option value="Casa particular (Cuba)">Casa particular (Cuba)</option>
+                    <option value="Train">Train</option>
+                    <option value="Earth house">Earth house</option>
+                    <option value="Heritage hotel (India)">Heritage hotel (India)</option>
+                    <option value="Hostel">Hostel</option>
+                    <option value="Hut">Hut</option>
+                    <option value="Resort">Resort</option>
+                    <option value="Treehouse">Treehouse</option>
+                    <option value="Boutique hotel">Boutique hotel</option>
+                    <option value="Hotel">Hotel</option>
+                    <option value="Barn">Barn</option>
+                    <option value="Tiny house">Tiny house</option>
+                    <option value="Unknown">Unknown</option>
+                    <option value="Bed and breakfast">Bed and breakfast</option>
+                    <option value="Condominium">Condominium</option>
+                    <option value="Campsite">Campsite</option>
+                    <option value="Villa">Villa</option>
+                    <option value="Pension (South Korea)">Pension (South Korea)</option>
+                    <option value="Boat">Boat</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
                 </div>
                 <div class="divForm"><label>Number of bedrooms</label>
                     <select>
@@ -73,8 +91,8 @@
                         <option value=20>20</option>
                     </select>
                 </div>
-                <button input type="submit">Submit</button>
-            </fieldset>
+                <button input type="submit">Submit</button>   
+                <div class="errorValidation"></div>        
         </form>
     </section>
 
