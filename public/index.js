@@ -6,12 +6,9 @@ async function fetchRandomListings() {
             throw new Error('Network response was not ok');
         }
 
-        const { listings, totalCount } = await response.json(); // Destructure the response to get listings and total count
-        displayListings(listings); // Listings name of value stored in MongoDB
+        const { listings } = await response.json(); // Adjusted destructuring if totalCount is not needed
+        displayListings(listings); // Display random listings
 
-        // Update listings count
-        const listingsCount = document.getElementById('listingsCount');
-        listingsCount.innerText = `${totalCount} Listings match your preferences`; // Display the total count of listings
     } catch (error) {
         console.error('Error fetching listings:', error);
     }
@@ -19,9 +16,9 @@ async function fetchRandomListings() {
 
 // Function to display listings in the bottom section
 function displayListings(listings) {
-    const bottomSection = document.getElementById('bottomSection'); // This looks at form 
+    const bottomSection = document.getElementById('bottomSection'); // Target the bottom section
 
-    // Clear existing content to allow update when refresh
+    // Clear existing content
     bottomSection.innerHTML = '';
 
     listings.forEach(listing => {
@@ -42,7 +39,7 @@ function displayListings(listings) {
         // Create price and rating elements
         const price = document.createElement('p');
         const priceValue = listing.price ? listing.price.toString() : 'N/A';
-        price.innerText = `Price: $${priceValue}`; // Use the converted price or 'N/A'
+        price.innerText = `Price: $${priceValue}`; // Price display
 
         const rating = document.createElement('p');
         rating.innerText = `Customer Rating: ${listing.review_scores?.review_scores_rating || 'N/A'}`; // Rating text
@@ -64,26 +61,25 @@ window.onload = fetchRandomListings;
 /* ----------------- PART 2: User Validation ----------------------------------------------------------------------------------------------- */
 async function userValidation() {
     // Step 1: Get values from user input
-    const location = document.getElementById('locationInput').value; // Adjust this ID to match your input field
-    const propertyType = document.querySelector('select[name="propertyType"]').value; // Adjust based on your select element
-    const bedrooms = document.querySelector('select[name="bedrooms"]').value; // Adjust based on your select element
+    const location = document.getElementById('location').value.trim();
+    const propertyType = document.querySelector('select[name="propertyType"]').value || null; // Allow null if unselected
+    const bedrooms = document.querySelector('select[name="bedrooms"]').value || null; // Allow null if unselected
+
+    // Ensure location is provided
+    if (!location) {
+        document.querySelector('.errorValidation').innerText = 'Location is required.';
+        return;
+    }
 
     try {
-        // Step 2: Prepare query object based on the input parameters
-        const query = {};
+        // Step 2: Prepare query object with required location
+        const query = { 'address.market': location }; // Location required
 
-        // Add filters to the query based on non-empty user inputs
-        if (location) {
-            query['address.market'] = location; // Adjust the field based on your data structure
-        }
-        if (propertyType) {
-            query.property_type = propertyType; // Add property type to query
-        }
-        if (bedrooms) {
-            query.bedrooms = { $eq: parseInt(bedrooms, 10) }; // Ensure bedrooms is treated as an integer
-        }
+        // Add optional filters if provided
+        if (propertyType) query.property_type = propertyType; // Only add if it's selected
+        if (bedrooms) query.bedrooms = parseInt(bedrooms, 10); // Only add if it's selected
 
-        // Clear existing listings in the bottom section before displaying new results
+        // Step 3: Send the query to the server
         const response = await fetch('/search-listings', {
             method: 'POST',
             headers: {
@@ -92,21 +88,23 @@ async function userValidation() {
             body: JSON.stringify(query),
         });
 
-        // Step 3: Handle response and display results
+        // Step 4: Handle response and display results
         if (response.ok) {
             const listings = await response.json();
-            displayListings(listings); // Use the displayListings function to show results
 
-            // Step 4: Check if any listings were found
-            if (listings.length === 0) {
-                const errorValidation = document.querySelector('.errorValidation'); // Adjust the class to match your error message element
-                errorValidation.innerText = 'No listings found for the specified criteria.'; // Show error message
+            // If listings match, display them; if not, show an error message
+            if (listings.length > 0) {
+                displayListings(listings);
+                document.querySelector('.errorValidation').innerText = ''; // Clear error if matches found
+            } else {
+                // Show error message if no matches
+                const errorValidation = document.querySelector('.errorValidation');
+                errorValidation.innerText = 'No listings found for the specified criteria.';
             }
         } else {
             console.error('Error fetching listings:', response.statusText);
         }
     } catch (error) {
         console.error('Error fetching listings:', error);
-        // Display error message if an error occurs
     }
 }

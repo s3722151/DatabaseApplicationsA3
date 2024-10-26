@@ -17,15 +17,16 @@
         <li><a href="bookings.html">Booking Page</a></li>
     </ul>
 
-    <section class="topSection">
-        <form action="index.html" method="POST">
-            
+    <section class="topSection" id="topSection">
+        <form id="searchForm" method="POST" onsubmit="event.preventDefault(); userValidation();">            
                 <h3>Listings?</h3>
-                <div class="divForm"><label>Location</label><input type="text" id='location' placeholder ="Name of listing E.g By Happy in Porto"name="location" required>
+                <div class="divForm">
+                <label for="location">Location(required)</label>
+                <input type="text" id='location' placeholder ="Name of listing E.g By Happy in Porto" name="location" required>
                 </div>
-            <div class="divForm"><label>Type of property</label>
-                <select>
-                    <option value="" disabled selected>Select a property type</option>
+            <div class="divForm"><label for="propertyType">Type of property</label>
+                <select name="propertyType" id="propertyType">
+                    <option value="">Select a property type</option>
                     <option value="House">House</option>
                     <option value="Camper/RV">Camper/RV</option>
                     <option value="Cottage">Cottage</option>
@@ -67,8 +68,9 @@
             </div>
 
                 </div>
-                <div class="divForm"><label>Number of bedrooms</label>
-                    <select>
+                <div class="divForm"><label for="bedrooms">Number of bedrooms:</label>
+                    <select name="bedrooms" id="bedrooms">
+                        <option value="" >Select number of bedrooms</option>
                         <option value=1>1</option>
                         <option value=2>2</option>
                         <option value=3>3</option>
@@ -104,5 +106,40 @@
 
 
     <script src="public/index.js"></script>
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+
+            const response = await fetch('/search-listings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const listings = await response.json();
+            const bottomSection = document.getElementById('bottomSection');
+            bottomSection.innerHTML = ''; // Clear previous listings
+
+            if (response.ok) {
+                listings.forEach(listing => {
+                    const listingDiv = document.createElement('div');
+                    listingDiv.innerHTML = `
+                        <h2><a href="bookings.html?listing_id=${listing._id}">${listing.name}</a></h2>
+                        <p>${listing.summary}</p>
+                        <p>Price: ${listing.price}</p>
+                        <p>Rating: ${listing['review_scores.review_scores_rating']}</p>
+                    `;
+                    bottomSection.appendChild(listingDiv);
+                });
+            } else {
+                bottomSection.innerHTML = `<p>${listings.error}</p>`;
+            }
+        });
+    </script>
+
 </body>
 </html>

@@ -33,26 +33,23 @@ const server = http.createServer(async (req, res) => {
             const database = client.db('sample_airbnb'); // Connect to the database
             const collection = database.collection('listingsAndReviews'); // Connect to the collection
 
-            // 1. Get the total count of listings (e.g., all listings, or add filters if needed)
+            // Get the total count of listings
             const totalListingsCount = await collection.countDocuments();
 
-            // 2. Fetch random listings with a $sample size of 3
+            // Fetch random listings with a $sample size of 3
             const randomListings = await collection.aggregate([
                 { $sample: { size: 3 } },
                 { $project: { name: 1, summary: 1, price: 1, "review_scores.review_scores_rating": 1 } }
             ]).toArray();
 
-            //console.log('Way to check if random listings are retrieved:', randomListings);
-
             // Convert Decimal128 to string for price
             randomListings.forEach(listing => {
                 if (listing.price && listing.price._bsontype === 'Decimal128') {
                     listing.price = listing.price.toString(); // Convert Decimal128 to string
-                    console.log('The object converted to string price is:', listing.price); // Check if conversion happens
                 }
             });
 
-            // 3. Send both random listings and the total listings count
+            // Send both random listings and the total listings count
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ listings: randomListings, totalCount: totalListingsCount }));
         } catch (error) {
@@ -75,8 +72,22 @@ const server = http.createServer(async (req, res) => {
                 const database = client.db('sample_airbnb'); // Connect to the database
                 const collection = database.collection('listingsAndReviews'); // Connect to the collection
 
-                // Query the database based on the provided filters
-                const listings = await collection.find(query).project({ name: 1, summary: 1, price: 1, "review_scores.review_scores_rating": 1 }).toArray();
+                // Create the search filter based on location (required) and optional fields
+                const filter = {};
+                if (query.location) {
+                    filter['address.market'] = query.location;
+                }
+                if (query.property_type) {
+                    filter.property_type = query.property_type;
+                }
+                if (query.bedrooms) {
+                    filter.bedrooms = parseInt(query.bedrooms, 10); // Convert bedrooms to an integer
+                }
+
+                // Query the database with the filter
+                const listings = await collection.find(filter)
+                    .project({ name: 1, summary: 1, price: 1, "review_scores.review_scores_rating": 1 })
+                    .toArray();
 
                 // Convert Decimal128 to string for price
                 listings.forEach(listing => {
@@ -85,11 +96,14 @@ const server = http.createServer(async (req, res) => {
                     }
                 });
 
-                // Way to check if the listings are retrieved
-                //console.log('Fetched search listings:', listings);
-
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(listings));
+                // If listings are found, send them; otherwise, send an error message
+                if (listings.length > 0) {
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify(listings));
+                } else {
+                    res.writeHead(404, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'No listings found for the specified criteria.' }));
+                }
             } catch (error) {
                 console.error('Error fetching search listings:', error);
                 res.writeHead(500, { 'Content-Type': 'text/plain' });
@@ -97,8 +111,9 @@ const server = http.createServer(async (req, res) => {
             }
         });
     } else {
+        //indicates that the server received a request for a URL it couldn’t find or handle
         res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('404 Not Found');
+        res.end('Error message 2: 404 Not Found');
     }
 });
 
