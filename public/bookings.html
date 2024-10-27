@@ -1,39 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookings Page</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-        <header>
-            <h1>Bookings Page</h1>
-        </header>
+    <header>
+        <h1>Bookings Page</h1>
+    </header>
 
-        <ul>
-            <li><a  href="index.html">Homepage</a></li>
-            <li><a class="active"href="bookings.html">Booking Page</a></li>
-        </ul>
+    <ul>
+        <li><a href="index.html" onclick="sessionStorage.removeItem('selectedListing')">Homepage</a></li>
+    </ul>
 
-        <section class="topSection">
-            <h2>Let's book the property</h2>
-            <form action="confirmation.html" method="POST">
-                <fieldset>
-                    <h3>Booking Details</h3>
-                    <div class="divForm"> <label>Check In:</label><input type="text" id='checkIn' name="checkIn" required> </div>
-                    <div class="divForm"> <label>Check Out</label><input type="text" id='checkOut' name="checkOut" required> </div>
-                    <h3>Your Details</h3>
-                    <div class="divForm"> <label>Your Name</label><input type="text" id='yourName' name="yourName" required> </div>
-                    <div class="divForm"> <label>Email Address</label><input type="text" id='emailAddress' name="emailAddress" required></div>
-                    <div class="divForm"> <label>Your Mobile No:</label><input type="text" id='mobileNo' name="mobileNo" required></div>
-                    <div class="divForm"> <label>Postal Address</label><input type="text" id='postalAddress' name="postalAddress" required></div>
-                    <div class="divForm"> <label>Residential Address</label><input type="text" id='residentialAddress' name="residentialAddress" required></div>
-                    <button input type="submit">Book Now</button>
-                </fieldset>
-            </form>
-        </section>    
+    <section class="topSection">
+        <h2>Let's book the property</h2>
+
+        <!-- Section to display booking details -->
+        <div id="bookingDetails"></div>
+
+        <form action="confirmation.html" method="POST">
+            <fieldset>
+                <h3>Booking Details</h3>
+                <div class="divForm"> <label>Check In:</label><input type="text" id='checkIn' name="checkIn" required>
+                </div>
+                <div class="divForm"> <label>Check Out:</label><input type="text" id='checkOut' name="checkOut"
+                        required>
+                </div>
+                <h3>Your Details</h3>
+                <div class="divForm"> <label>Your Name:</label><input type="text" id='yourName' name="yourName"
+                        required>
+                </div>
+                <div class="divForm"> <label>Email Address:</label><input type="text" id='emailAddress'
+                        name="emailAddress" required></div>
+                <div class="divForm"> <label>Your Mobile No:</label><input type="text" id='mobileNo' name="mobileNo"
+                        required></div>
+                <div class="divForm"> <label>Postal Address:</label><input type="text" id='postalAddress'
+                        name="postalAddress" required></div>
+                <div class="divForm"> <label>Residential Address:</label><input type="text" id='residentialAddress'
+                        name="residentialAddress" required></div>
+                <button type="submit">Book Now</button>
+            </fieldset>
+        </form>
+    </section>
+
+    <script>
+        // Retrieve the listing data when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectedListing = JSON.parse(sessionStorage.getItem('selectedListing'));
+            if (selectedListing) {
+                // Display the listing information on bookings.html
+                const bookingDetails = document.getElementById('bookingDetails');
+                bookingDetails.innerHTML = `
+                    <h3>Property Details:</h3>
+                    <p><strong>Name:</strong> ${selectedListing.name}</p>
+                    <p><strong>Summary:</strong> ${selectedListing.summary}</p>
+                    <p><strong>Daily Rate:</strong> $${selectedListing.price}</p>
+                    <p><strong>Customer Rating:</strong> ${selectedListing.review_scores?.review_scores_rating || 'N/A'}</p>
+                `;
+            } else {
+                const bookingDetails = document.getElementById('bookingDetails');
+                bookingDetails.innerHTML = '<p>No property selected.</p>';
+            }
+        });
+    </script>
 </body>
-
 
 </html>

@@ -8,6 +8,7 @@ header {
     /* Adjust the padding as needed */
     background-color: rgb(255, 99, 71);
 }
+
 /* https: //www.w3schools.com/css/tryit.asp?filename=trycss_navbar_horizontal_dividers */
 ul {
     list-style-type: none;
@@ -86,5 +87,3 @@ HOMEPAGE - DROPDOWN
     max-height: 40em;
     /* Set a maximum height if needed */
 }
-
-       

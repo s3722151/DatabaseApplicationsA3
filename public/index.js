@@ -1,110 +1,94 @@
-// Function to fetch and display random listings
-async function fetchRandomListings() {
-    try {
-        const response = await fetch('/random-listings');
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+document.addEventListener('DOMContentLoaded', () => {
+    // Fetch and display random listings on page load
+    fetchRandomListings();
 
-        const { listings } = await response.json(); // Adjusted destructuring if totalCount is not needed
-        displayListings(listings); // Display random listings
+    const searchForm = document.getElementById('searchForm');
+    searchForm.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent the default form submission
 
-    } catch (error) {
-        console.error('Error fetching listings:', error);
-    }
-}
+        const location = document.getElementById('location').value;
+        const propertyType = document.getElementById('propertyType').value;
+        const bedrooms = document.getElementById('bedrooms').value;
 
-// Function to display listings in the bottom section
-function displayListings(listings) {
-    const bottomSection = document.getElementById('bottomSection'); // Target the bottom section
-
-    // Clear existing content
-    bottomSection.innerHTML = '';
-
-    listings.forEach(listing => {
-        // Create a div for each listing
-        const listingDiv = document.createElement('div');
-        listingDiv.className = 'listing';
-
-        // Create the hyperlink
-        const listingLink = document.createElement('a');
-        listingLink.href = `bookings.html?listing_id=${listing._id}`; // URL with listing ID
-        listingLink.innerText = listing.name; // Listing name as hyperlink
-        listingLink.className = 'active'; // Add class for active styling
-
-        // Create listing summary
-        const summary = document.createElement('p');
-        summary.innerText = `Summary: ${listing.summary || 'No summary available'}`; // Summary text
-
-        // Create price and rating elements
-        const price = document.createElement('p');
-        const priceValue = listing.price ? listing.price.toString() : 'N/A';
-        price.innerText = `Price: $${priceValue}`; // Price display
-
-        const rating = document.createElement('p');
-        rating.innerText = `Customer Rating: ${listing.review_scores?.review_scores_rating || 'N/A'}`; // Rating text
-
-        // Append elements to listing div
-        listingDiv.appendChild(listingLink);
-        listingDiv.appendChild(summary);
-        listingDiv.appendChild(price);
-        listingDiv.appendChild(rating);
-
-        // Append listing div to bottom section
-        bottomSection.appendChild(listingDiv);
-    });
-}
-
-// Call the fetchRandomListings function when the page loads
-window.onload = fetchRandomListings;
-
-/* ----------------- PART 2: User Validation ----------------------------------------------------------------------------------------------- */
-async function userValidation() {
-    // Step 1: Get values from user input
-    const location = document.getElementById('location').value.trim();
-    const propertyType = document.querySelector('select[name="propertyType"]').value || null; // Allow null if unselected
-    const bedrooms = document.querySelector('select[name="bedrooms"]').value || null; // Allow null if unselected
-
-    // Ensure location is provided
-    if (!location) {
-        document.querySelector('.errorValidation').innerText = 'Location is required.';
-        return;
-    }
-
-    try {
-        // Step 2: Prepare query object with required location
-        const query = { 'address.market': location }; // Location required
-
-        // Add optional filters if provided
-        if (propertyType) query.property_type = propertyType; // Only add if it's selected
-        if (bedrooms) query.bedrooms = parseInt(bedrooms, 10); // Only add if it's selected
-
-        // Step 3: Send the query to the server
-        const response = await fetch('/search-listings', {
+        // Send the search request to the server
+        const response = await fetch('/api/listings/search', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(query),
+            body: JSON.stringify({ location, propertyType, bedrooms }),
         });
 
-        // Step 4: Handle response and display results
+        //Ddebugging - check what a user enter
+        //console.log('Response from server:', response);
+
+        // Check if the response is OK
         if (response.ok) {
             const listings = await response.json();
-
-            // If listings match, display them; if not, show an error message
-            if (listings.length > 0) {
-                displayListings(listings);
-                document.querySelector('.errorValidation').innerText = ''; // Clear error if matches found
-            } else {
-                // Show error message if no matches
-                const errorValidation = document.querySelector('.errorValidation');
-                errorValidation.innerText = 'No listings found for the specified criteria.';
-            }
+            // console.log('Listings retrieved:', listings); // Log retrieved listings
+            renderListings(listings);
         } else {
             console.error('Error fetching listings:', response.statusText);
         }
-    } catch (error) {
-        console.error('Error fetching listings:', error);
-    }
+    });
+});
+
+// Fetch random listings function
+async function fetchRandomListings() {
+    const response = await fetch('/api/listings/random');
+    const listings = await response.json();
+    renderListings(listings, true); // Optionally display random listings
 }
+
+// Render listings function
+// Render listings function
+function renderListings(listings, isRandom = false) {
+    const listingEntered = document.getElementById('listingEntered');
+    listingEntered.innerHTML = ''; // Clear previous results
+
+    if (listings.length === 0) {
+        listingEntered.innerHTML = '<p>No listings found.</p>';
+        return;
+    }
+
+    const listingCount = isRandom ? 'Random Listings' : `${listings.length} listings match your preferences`;
+    listingEntered.innerHTML += `<h2>${listingCount}</h2>`;
+
+    listings.forEach(listing => {
+        const { name, summary, price, review_scores } = listing;
+
+        const listingHtml = `
+            <div>
+                <a href="#" class="listing-link" data-listing='${JSON.stringify({ name, summary, price, review_scores })}'>${name}</a>
+                <p>${summary}</p>
+                <p>Daily Rate: $${price || 'N/A'}</p>
+                <p>Customer Rating: ${review_scores?.review_scores_rating || 'N/A'}</p>
+            </div>
+        `;
+        listingEntered.innerHTML += listingHtml;
+    });
+
+    // Add event listener for the listing links
+    document.querySelectorAll('.listing-link').forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent default anchor behavior
+            const listingData = JSON.parse(event.target.getAttribute('data-listing'));
+            // Store the listing data temporarily
+            sessionStorage.setItem('selectedListing', JSON.stringify(listingData));
+            // Redirect to bookings.html
+            window.location.href = 'bookings.html';
+        });
+    });
+}
+
+
+// Function to convert price to string
+function convertPriceToString(price) {
+    // Check if price is a BSON Decimal128 type
+    if (price && price.constructor && price.constructor.name === 'Decimal128') {
+        return price.toString(); // Convert it to a string
+    }
+    // If it's already a number or another type, handle accordingly
+    return price ? `$${price}` : 'N/A';
+}
+

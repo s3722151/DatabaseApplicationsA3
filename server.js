@@ -1,136 +1,97 @@
+// Load environment variables from the .env file
+require('dotenv').config();
+
+// Import necessary modules
+const express = require('express');
 const { MongoClient } = require('mongodb');
-const http = require('http'); // For creating the HTTP server
-const fs = require('fs'); // For file system operations
 const path = require('path');
 
-// MongoDB connection URI
-const uri = 'mongodb+srv://s3722151:Gatesea3@assignment3cluster.kbysd.mongodb.net/';
-const client = new MongoClient(uri);
+// Initialize Express app and set port
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Create an HTTP server
-const server = http.createServer(async (req, res) => {
-    console.log(`Received request for: ${req.url}`);
+// MongoDB connection URI from .env
+const uri = process.env.MONGO_URI;
 
-    // Serve static files from the public directory
-    if (req.url.startsWith('/public/')) {
-        const filePath = path.join(__dirname, req.url);
-        fs.readFile(filePath, 'utf8', (err, data) => {
-            if (err) {
-                res.writeHead(404, { 'Content-Type': 'text/plain' });
-                res.end('404 Not Found');
-                return;
-            }
-            res.writeHead(200);
-            res.end(data);
-        });
-    } else if (req.url === '/') {
-        serveFile(res, 'public/index.html', 'text/html');
+// Middleware for static files and JSON parsing
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+
+// MongoDB Client and Database Setup
+let db;
+async function connectToDb() {
+    try {
+        const client = new MongoClient(uri);
+        await client.connect();
+        db = client.db('sample_airbnb'); // Specify your database name here
+        console.log('Connected to MongoDB');
+    } catch (error) {
+        console.error('Error connecting to MongoDB:', error);
     }
-    // Route for fetching random listings
-    else if (req.url === '/random-listings') {
-        try {
-            await client.connect(); // First connect to the connection string
-            const database = client.db('sample_airbnb'); // Connect to the database
-            const collection = database.collection('listingsAndReviews'); // Connect to the collection
+}
+connectToDb();
 
-            // Get the total count of listings
-            const totalListingsCount = await collection.countDocuments();
-
-            // Fetch random listings with a $sample size of 3
-            const randomListings = await collection.aggregate([
-                { $sample: { size: 3 } },
-                { $project: { name: 1, summary: 1, price: 1, "review_scores.review_scores_rating": 1 } }
-            ]).toArray();
-
-            // Convert Decimal128 to string for price
-            randomListings.forEach(listing => {
-                if (listing.price && listing.price._bsontype === 'Decimal128') {
-                    listing.price = listing.price.toString(); // Convert Decimal128 to string
-                }
-            });
-
-            // Send both random listings and the total listings count
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ listings: randomListings, totalCount: totalListingsCount }));
-        } catch (error) {
-            console.error('Error fetching random listings:', error);
-            res.writeHead(500, { 'Content-Type': 'text/plain' });
-            res.end('Error fetching random listings');
-        }
+// Function to convert price to string
+function convertPrice(price) {
+    if (price && price._bsontype === 'Decimal128') {
+        return price.toString();
     }
-    // Route for searching listings based on filters
-    else if (req.url === '/search-listings' && req.method === 'POST') {
-        let body = '';
-        req.on('data', chunk => {
-            body += chunk.toString(); // Convert Buffer to string
-        });
+    return price;
+}
 
-        req.on('end', async () => {
-            try {
-                const query = JSON.parse(body); // Parse the JSON body into an object
-                await client.connect(); // Ensure the client is connected
-                const database = client.db('sample_airbnb'); // Connect to the database
-                const collection = database.collection('listingsAndReviews'); // Connect to the collection
+// Endpoint to get random listings
+app.get('/api/listings/random', async (req, res) => {
+    try {
+        const listings = await db.collection('listingsAndReviews').aggregate([{ $sample: { size: 5 } }]).toArray();
+        // Log to check if the listings are retrieved from server
+        //console.log('Random Listings Fetched:', listings);
+        const convertedListings = listings.map(listing => ({
+            ...listing,
+            price: convertPrice(listing.price),
+        }));
 
-                // Create the search filter based on location (required) and optional fields
-                const filter = {};
-                if (query.location) {
-                    filter['address.market'] = query.location;
-                }
-                if (query.property_type) {
-                    filter.property_type = query.property_type;
-                }
-                if (query.bedrooms) {
-                    filter.bedrooms = parseInt(query.bedrooms, 10); // Convert bedrooms to an integer
-                }
-
-                // Query the database with the filter
-                const listings = await collection.find(filter)
-                    .project({ name: 1, summary: 1, price: 1, "review_scores.review_scores_rating": 1 })
-                    .toArray();
-
-                // Convert Decimal128 to string for price
-                listings.forEach(listing => {
-                    if (listing.price && listing.price._bsontype === 'Decimal128') {
-                        listing.price = listing.price.toString(); // Convert Decimal128 to string
-                    }
-                });
-
-                // If listings are found, send them; otherwise, send an error message
-                if (listings.length > 0) {
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify(listings));
-                } else {
-                    res.writeHead(404, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ error: 'No listings found for the specified criteria.' }));
-                }
-            } catch (error) {
-                console.error('Error fetching search listings:', error);
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Error fetching search listings');
-            }
-        });
-    } else {
-        //indicates that the server received a request for a URL it couldn’t find or handle
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('Error message 2: 404 Not Found');
+        res.json(convertedListings);
+    } catch (error) {
+        console.error('Error fetching random listings:', error);
+        res.status(500).json({ error: 'Error fetching random listings' });
     }
 });
 
-// Function to serve files
-function serveFile(res, filePath, contentType) {
-    fs.readFile(filePath, 'utf8', (err, data) => {
-        if (err) {
-            res.writeHead(500, { 'Content-Type': 'text/plain' });
-            res.end('Error reading the file');
-            return;
-        }
-        res.writeHead(200, { 'Content-Type': contentType });
-        res.end(data);
-    });
-}
+// Endpoint to search listings based on form input
+app.post('/api/listings/search', async (req, res) => {
+    const { location, propertyType, bedrooms } = req.body;
+    const query = {
+        // Dynamic Object - only properties with truthy values included in final object
+        ...(location && {
+            $expr: { $eq: [{ $strcasecmp: ['$name', location] }, 0] } // Case-insensitive exact match for name
+        }),
+        ...(propertyType && { property_type: propertyType }),
+        ...(bedrooms && { bedrooms: parseInt(bedrooms, 10) }),
+    };
+
+    // Used to check what if input is equal to server
+    // console.log('Received search query:', query); // Log the search query
+
+    try {
+        const listings = await db.collection('listingsAndReviews').find(query).limit(10).toArray();
+        // console.log('Listings retrieved from database:', listings); // Log the retrieved listings
+
+        // Convert price before sending response
+        //https://www.w3schools.com/jsref/jsref_map.asp
+        const convertedListings = listings.map(listing => ({
+            ...listing,
+            price: convertPrice(listing.price),
+        }));
+        res.json(convertedListings);
+    } catch (error) {
+        console.error('Error searching for listings:', error);
+        res.status(500).json({ error: 'Error searching for listings' });
+    }
+});
+
+
 
 // Start the server
-server.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

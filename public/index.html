@@ -4,26 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
-    <link rel="stylesheet" href="public/styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <header>
         <h1>Homepage</h1>
     </header>
-
     <ul>
         <li><a class="active" href="index.html">Homepage</a></li>
-        <li><a href="bookings.html">Booking Page</a></li>
     </ul>
 
     <section class="topSection" id="topSection">
-        <form id="searchForm" method="POST" onsubmit="event.preventDefault(); userValidation();">            
-                <h3>Listings?</h3>
-                <div class="divForm">
+        <form id="searchForm" method="POST" onsubmit="">
+            <h3>Listings</h3>
+            <div class="divForm">
                 <label for="location">Location(required)</label>
-                <input type="text" id='location' placeholder ="Name of listing E.g By Happy in Porto" name="location" required>
-                </div>
+                <input type="text" id='location' placeholder="Name of listing E.g By Happy in Porto" name="location"
+                    required>
+            </div>
             <div class="divForm"><label for="propertyType">Type of property</label>
                 <select name="propertyType" id="propertyType">
                     <option value="">Select a property type</option>
@@ -67,79 +66,26 @@
                 </select>
             </div>
 
-                </div>
-                <div class="divForm"><label for="bedrooms">Number of bedrooms:</label>
-                    <select name="bedrooms" id="bedrooms">
-                        <option value="" >Select number of bedrooms</option>
-                        <option value=1>1</option>
-                        <option value=2>2</option>
-                        <option value=3>3</option>
-                        <option value=4>4</option>
-                        <option value=5>5</option>
-                        <option value=6>6</option>
-                        <option value=7>7</option>
-                        <option value=8>8</option>
-                        <option value=9>9</option>
-                        <option value=10>10</option>
-                        <option value=11>11</option>
-                        <option value=12>12</option>
-                        <option value=13>13</option>
-                        <option value=14>14</option>
-                        <option value=15>15</option>
-                        <option value=16>16</option>
-                        <option value=17>17</option>
-                        <option value=18>18</option>
-                        <option value=19>19</option>
-                        <option value=20>20</option>
-                    </select>
-                </div>
-                <button input type="submit">Submit</button>   
-                <div class="errorValidation"></div>        
+            </div>
+            <div class="divForm"><label for="bedrooms">Number of bedrooms:</label>
+                <select name="bedrooms" id="bedrooms">
+                    <option value="">Select number of bedrooms</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                </select>
+            </div>
+            <button input type="submit">Submit</button>
+            <div class="errorValidation"></div>
         </form>
     </section>
 
     <section class="bottomSection" id="bottomSection">
-        <p id="listingsCount"></p> 
-        <!-- Placeholder for the number of listings -->
-        This is for some random listings.
+        <h2>Listings</h2>
+        <div id="listingEntered"></div>
+        <div id="randomListings"></div>
     </section>
 
-
-    <script src="public/index.js"></script>
-    <script>
-        document.getElementById('searchForm').addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent default form submission
-            const formData = new FormData(event.target);
-            const data = Object.fromEntries(formData.entries());
-
-            const response = await fetch('/search-listings', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            const listings = await response.json();
-            const bottomSection = document.getElementById('bottomSection');
-            bottomSection.innerHTML = ''; // Clear previous listings
-
-            if (response.ok) {
-                listings.forEach(listing => {
-                    const listingDiv = document.createElement('div');
-                    listingDiv.innerHTML = `
-                        <h2><a href="bookings.html?listing_id=${listing._id}">${listing.name}</a></h2>
-                        <p>${listing.summary}</p>
-                        <p>Price: ${listing.price}</p>
-                        <p>Rating: ${listing['review_scores.review_scores_rating']}</p>
-                    `;
-                    bottomSection.appendChild(listingDiv);
-                });
-            } else {
-                bottomSection.innerHTML = `<p>${listings.error}</p>`;
-            }
-        });
-    </script>
-
+    <script src="index.js"></script>
 </body>
 </html>
