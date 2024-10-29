@@ -74,6 +74,95 @@ HOMEPAGE - DROPDOWN
 /* HOMEPAGE - DISPLAY RANDOM LISTINGS */
 .bottomSection {
     color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    background-color: grey;
+    /* Remove or adjust the fixed height */
+    height: auto;
+    /* Adjust as needed, or use max-height instead */
+    padding: 50px 50px 50px 50px;
+    margin: 20px 40px 20px 40px;
+    /* Ensure scrolling if content exceeds visible area */
+    overflow-y: auto;
+    max-height: 40em;
+    /* Set a maximum height if needed */
+}
+/* https: //www.w3schools.com/html/html_css.asp */
+header {
+    text-align: center;
+    /* Centers the content horizontally */
+    padding-left: 20px;
+    /* Adjust the padding as needed */
+    padding-right: 20px;
+    /* Adjust the padding as needed */
+    background-color: rgb(255, 99, 71);
+}
+
+/* https: //www.w3schools.com/css/tryit.asp?filename=trycss_navbar_horizontal_dividers */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+    border-right: 1px solid #bbb;
+}
+
+li:last-child {
+    border-right: none;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #04AA6D;
+}
+
+
+/*-------------------------- BODY ------------------------------------------- */
+h1 {
+    color: black;
+    /* Sets the text color to blue */
+    font-family: verdana;
+    /* Uses Verdana font */
+    font-size: 300%;
+    /* Sets the font size to 300% */
+}
+
+
+/* 
+HOMEPAGE - DROPDOWN
+*/
+.topSection {
+    color: black;
+    font-family: verdana;
+    font-size: 100%;
+    background-color: grey;
+    /* Adjust or remove fixed height */
+    height: auto;
+    /* Allow it to expand as needed */
+    padding: 50px;
+    margin: 20px 40px 20px 40px;
+}
+
+
+/* HOMEPAGE - DISPLAY RANDOM LISTINGS */
+.bottomSection {
+    color: black;
     font-family: verdana;
     font-size: 100%;
     background-color: grey;
@@ -86,4 +175,66 @@ HOMEPAGE - DROPDOWN
     overflow-y: auto;
     max-height: 40em;
     /* Set a maximum height if needed */
+}
+
+.listing-container {
+    border: 1px solid #ccc;
+    /* Adds a light gray border */
+    border-radius: 8px;
+    /* Rounded corners */
+    padding: 16px;
+    /* Space inside the box */
+    margin: 10px 0;
+    /* Space between listings */
+    background-color: #f9f9f9;
+    /* Light background color */
+    transition: box-shadow 0.3s;
+    /* Smooth transition for hover effect */
+}
+
+.listing-container:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Shadow on hover */
+}
+
+.listing-link {
+    font-weight: bold;
+    /* Make the listing name bold */
+    color: darkred;
+    /* Bootstrap primary color */
+    text-decoration: none;
+    /* Remove underline */
+}
+
+.listing-link:hover {
+    text-decoration: underline;
+    /* Underline on hover */
+}
+
+p {
+    margin: 8px 0;
+    /* Space between paragraphs */
+}
+
+.daily-rate {
+    color: #28a745;
+    /* Green color for the price */
+    font-weight: bold;
+    /* Make the price bold */
+}
+
+.customer-rating {
+    color: #ffc107;
+    /* Yellow color for ratings */
+}
+
+
+/* Form */
+label {
+    width: 60%;
+}
+
+input {
+    width: 10%;
+    height: 1.4em;
 }

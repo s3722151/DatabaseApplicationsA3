@@ -51,7 +51,11 @@ function renderListings(listings, isRandom = false) {
         return;
     }
 
-    const listingCount = isRandom ? 'Random Listings' : `${listings.length} listings match your preferences`;
+    //Turnary operator, list Random listing if true, otherwise if false listingCount set to listings.Length
+    // const listingCount = isRandom ? 'Random Listings' : `${listings.length} listings match your preferences`;
+    const listingCount = isRandom
+        ? 'Random Listings'
+        : `${listings.length} listing${listings.length === 1 ? '' : 's'} match${listings.length === 1 ? 'es' : ''} your preference`;
     listingEntered.innerHTML += `<h2>${listingCount}</h2>`;
 
     listings.forEach(listing => {
