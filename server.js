@@ -3,7 +3,7 @@ require('dotenv').config();
 
 // Import necessary modules
 const express = require('express');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const path = require('path');
 
 // Initialize Express app and set port
@@ -89,7 +89,57 @@ app.post('/api/listings/search', async (req, res) => {
     }
 });
 
+//Endpoint to handle booking submission
+//INSERT EXPRESS ROUTE FOR BOOKINGS HERE
+// Endpoint to handle booking submission
+app.post('/api/bookings', async (req, res) => {
+    try {
+        // Destructure fields from request body
+        const {
+            listingId, // The ID of the listing being booked
+            guestName, // Name of the guest
+            checkInDate, // Check-in date
+            checkOutDate, // Check-out date
+            numberOfGuests, // Total number of guests
+            specialRequests // Any special requests from the guest
+        } = req.body;
 
+        // Validate that listingId is present
+        if (!listingId) {
+            return res.status(400).json({ error: 'Listing ID is required' });
+        }
+
+        // Create booking data object
+        const bookingData = {
+            guestName,
+            checkInDate,
+            checkOutDate,
+            numberOfGuests,
+            specialRequests,
+            createdAt: new Date() // Timestamp when the booking was made
+        };
+
+        // Update the listingsAndReviews collection by pushing booking data to the bookings array
+        const result = await db.collection('listingsAndReviews').updateOne(
+            { _id: ObjectId(listingId) }, // Use the provided listingId
+            { $push: { bookings: bookingData } } // Push booking data to the bookings array
+        );
+
+        // Check if the listing was found and updated
+        if (result.modifiedCount === 0) {
+            return res.status(404).json({ error: 'Listing not found or booking not added' });
+        }
+
+        // Send response with the inserted booking details
+        res.status(201).json({
+            message: 'Booking created successfully',
+            bookingData: bookingData,
+        });
+    } catch (error) {
+        console.error('Error creating booking:', error);
+        res.status(500).json({ error: 'Error creating booking' });
+    }
+});
 
 // Start the server
 app.listen(PORT, () => {

@@ -41,7 +41,6 @@ async function fetchRandomListings() {
 }
 
 // Render listings function
-// Render listings function
 function renderListings(listings, isRandom = false) {
     const listingEntered = document.getElementById('listingEntered');
     listingEntered.innerHTML = ''; // Clear previous results
@@ -51,26 +50,25 @@ function renderListings(listings, isRandom = false) {
         return;
     }
 
-    //Turnary operator, list Random listing if true, otherwise if false listingCount set to listings.Length
-    // const listingCount = isRandom ? 'Random Listings' : `${listings.length} listings match your preferences`;
-    const listingCount = isRandom
-        ? 'Random Listings'
-        : `${listings.length} listing${listings.length === 1 ? '' : 's'} match${listings.length === 1 ? 'es' : ''} your preference`;
+    const listingCount = isRandom ? 'Random Listings' : `${listings.length} listings match your preferences`;
     listingEntered.innerHTML += `<h2>${listingCount}</h2>`;
 
     listings.forEach(listing => {
-        const { name, summary, price, review_scores } = listing;
+        //destructuring assignment  - get values from listing
+        const { _id, name, summary, price, review_scores } = listing;
 
         const listingHtml = `
-            <div>
-                <a href="#" class="listing-link" data-listing='${JSON.stringify({ name, summary, price, review_scores })}'>${name}</a>
-                <p>${summary}</p>
-                <p>Daily Rate: $${price || 'N/A'}</p>
-                <p>Customer Rating: ${review_scores?.review_scores_rating || 'N/A'}</p>
-            </div>
-        `;
+        <div="listing-container">
+            <a href="#" class="listing-link" data-listing='${JSON.stringify({ name, summary, price, review_scores, _id })}'>${name}</a>
+            <p>${summary}</p>
+            <p>Daily Rate: $${price || 'N/A'}</p>
+            <p>Customer Rating: ${review_scores?.review_scores_rating || 'N/A'}</p>
+        </div>
+    `;
         listingEntered.innerHTML += listingHtml;
     });
+
+
 
     // Add event listener for the listing links
     document.querySelectorAll('.listing-link').forEach(link => {
@@ -79,6 +77,8 @@ function renderListings(listings, isRandom = false) {
             const listingData = JSON.parse(event.target.getAttribute('data-listing'));
             // Store the listing data temporarily
             sessionStorage.setItem('selectedListing', JSON.stringify(listingData));
+            //Check the data structure.
+            console.log('Stored Listing Data:', listingData);
             // Redirect to bookings.html
             window.location.href = 'bookings.html';
         });

@@ -14,5 +14,22 @@ Create a file to run the application (Ex 3.4)
 
 Create a function to search for values (Ex 3.5.7)
 
+Bookings.html 
+1.Retrieve the values from index.html
+2.Client Side valdation (YYYY-MM-DD)
+3.Server side processing (server.js)
+    Validate the incoming data.
+    Convert dates to the ISO 8601 format, which MongoDB requires.
+    Insert the booking into the bookings array of the relevant listing document.
+
+
+4. Server side validation 
+- After entering and validating on client side, we send to server side to Validate
+- This is by creating object on server to Validate
+- This is to check if all fields are present and transform any necessary data formats
+
+
 Issues encountered 
 ObjectObject: https://www.w3schools.com/jsref/jsref_map.asp
+Convert date into IS0 8601: https://www.w3schools.com/jsref/jsref_toisostring.asp
+The listing_ID is an objectID but on client it is a string.

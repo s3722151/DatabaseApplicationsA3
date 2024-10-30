@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,52 +23,70 @@
         <!-- Section to display booking details -->
         <div id="bookingDetails"></div>
 
-        <form action="confirmation.html" method="POST">
+        <form id="bookingForm">
             <fieldset>
-                <h3>Booking Details</h3>
-                <div class="divForm"> <label>Check In:</label><input type="text" id='checkIn' name="checkIn" required>
+                <h2>Booking Details</h2>
+                <h3>Check-in date</h3>
+
+                <div class="divForm">
+                    <label>Check In:</label>
+                    <input type="date" id="checkIn" name="checkIn" placeholder="YYYY-MM-DD" required />
                 </div>
-                <div class="divForm"> <label>Check Out:</label><input type="text" id='checkOut' name="checkOut"
-                        required>
+                <div id="checkInValidation" class="bookingValidation"></div>
+
+                <div class="divForm">
+                    <label>Check Out:</label>
+                    <input type="date" id="checkOut" name="checkOut" placeholder="YYYY-MM-DD" required />
                 </div>
+                <div id="checkOutValidation" class="bookingValidation"></div>
+
                 <h3>Your Details</h3>
-                <div class="divForm"> <label>Your Name:</label><input type="text" id='yourName' name="yourName"
-                        required>
+
+                <div class="divForm">
+                    <label>Your Name:</label>
+                    <input type="text" id="yourName" name="yourName" placeholder="John Doe" required />
                 </div>
-                <div class="divForm"> <label>Email Address:</label><input type="text" id='emailAddress'
-                        name="emailAddress" required></div>
-                <div class="divForm"> <label>Your Mobile No:</label><input type="text" id='mobileNo' name="mobileNo"
-                        required></div>
-                <div class="divForm"> <label>Postal Address:</label><input type="text" id='postalAddress'
-                        name="postalAddress" required></div>
-                <div class="divForm"> <label>Residential Address:</label><input type="text" id='residentialAddress'
-                        name="residentialAddress" required></div>
+                <div id="nameValidation" class="bookingValidation"></div>
+
+                <div class="divForm">
+                    <label>Email Address:</label>
+                    <input type="email" id="emailAddress" name="emailAddress" placeholder="yourname@gmail.com"
+                        required />
+                </div>
+                <div id="emailValidation" class="bookingValidation"></div>
+
+                <div class="divForm">
+                    <label>Your Daytime Phone:</label>
+                    <input type="text" id="daytimePhone" name="daytimePhone" placeholder="1234 567 891" required />
+                </div>
+                <div id="daytimePhoneValidation" class="bookingValidation"></div>
+
+                <div class="divForm">
+                    <label>Your Mobile No:</label>
+                    <input type="text" id="mobileNo" name="mobileNo" placeholder="1234 567 891" required />
+                </div>
+                <div id="mobileValidation" class="bookingValidation"></div>
+
+                <div class="divForm">
+                    <label>Postal Address:</label>
+                    <input type="text" id="postalAddress" name="postalAddress" placeholder="5 Street Name, Suburb, 1028"
+                        required />
+                </div>
+                <div id="postalAddressValidation" class="bookingValidation"></div>
+
+                <div class="divForm">
+                    <label>Residential Address:</label>
+                    <input type="text" id="residentialAddress" name="residentialAddress"
+                        placeholder="5 Street Name, Suburb, State" required />
+                </div>
+                <div id="residentialAddressValidation" class="bookingValidation"></div>
+
                 <button type="submit">Book Now</button>
             </fieldset>
         </form>
-        <div class="bookingValidation"></div>
     </section>
 
-    <script>
-        // Retrieve the listing data when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            const selectedListing = JSON.parse(sessionStorage.getItem('selectedListing'));
-            if (selectedListing) {
-                // Display the listing information on bookings.html
-                const bookingDetails = document.getElementById('bookingDetails');
-                bookingDetails.innerHTML = `
-                    <h3>Property Details:</h3>
-                    <p><strong>Name:</strong> ${selectedListing.name}</p>
-                    <p><strong>Summary:</strong> ${selectedListing.summary}</p>
-                    <p><strong>Daily Rate:</strong> $${selectedListing.price}</p>
-                    <p><strong>Customer Rating:</strong> ${selectedListing.review_scores?.review_scores_rating || 'N/A'}</p>
-                `;
-            } else {
-                const bookingDetails = document.getElementById('bookingDetails');
-                bookingDetails.innerHTML = '<p>No property selected.</p>';
-            }
-        });
-    </script>
-</body>
 
+    <script src="bookings.js"></script>
+</body>
 </html>
