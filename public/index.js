@@ -24,9 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Check if the response is OK
         if (response.ok) {
-            const listings = await response.json();
+            const { totalCount, listings } = await response.json();
             // console.log('Listings retrieved:', listings); // Log retrieved listings
-            renderListings(listings);
+            renderListings(listings, totalCount);
+            console.log(`Total listings found: ${totalCount}`); // Display total count in console
         } else {
             console.error('Error fetching listings:', response.statusText);
         }
@@ -37,11 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
 async function fetchRandomListings() {
     const response = await fetch('/api/listings/random');
     const listings = await response.json();
-    renderListings(listings, true); // Optionally display random listings
+    renderListings(listings, listings.length, true); // Optionally display random listings
 }
 
 // Render listings function
-function renderListings(listings, isRandom = false) {
+function renderListings(listings, totalCount, isRandom = false) {
     const listingEntered = document.getElementById('listingEntered');
     listingEntered.innerHTML = ''; // Clear previous results
 
@@ -50,7 +51,9 @@ function renderListings(listings, isRandom = false) {
         return;
     }
 
-    const listingCount = isRandom ? 'Random Listings' : `${listings.length} listings match your preferences`;
+    const listingCount = isRandom
+        ? 'Random Listings'
+        : `${totalCount} listings match your preferences`; // Use totalCount for accurate display
     listingEntered.innerHTML += `<h2>${listingCount}</h2>`;
 
     listings.forEach(listing => {
@@ -63,8 +66,10 @@ function renderListings(listings, isRandom = false) {
             <p>${summary}</p>
             <p>Daily Rate: $${price || 'N/A'}</p>
             <p>Customer Rating: ${review_scores?.review_scores_rating || 'N/A'}</p>
+            <p>Listing ID: ${_id}</p> <!-- Display _id here for verification -->
         </div>
-    `;
+        `;
+
         listingEntered.innerHTML += listingHtml;
     });
 

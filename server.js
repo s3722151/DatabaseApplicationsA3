@@ -63,7 +63,7 @@ app.post('/api/listings/search', async (req, res) => {
     const query = {
         // Dynamic Object - only properties with truthy values included in final object
         ...(location && {
-            $expr: { $eq: [{ $strcasecmp: ['$name', location] }, 0] } // Case-insensitive exact match for name
+            'address.market': { $regex: new RegExp(location, 'i') } // Case-insensitive match for address.market
         }),
         ...(propertyType && { property_type: propertyType }),
         ...(bedrooms && { bedrooms: parseInt(bedrooms, 10) }),
@@ -73,6 +73,9 @@ app.post('/api/listings/search', async (req, res) => {
     // console.log('Received search query:', query); // Log the search query
 
     try {
+        // Count total matching listings
+        const totalCount = await db.collection('listingsAndReviews').countDocuments(query);
+
         const listings = await db.collection('listingsAndReviews').find(query).limit(10).toArray();
         // console.log('Listings retrieved from database:', listings); // Log the retrieved listings
 
@@ -82,7 +85,9 @@ app.post('/api/listings/search', async (req, res) => {
             ...listing,
             price: convertPrice(listing.price),
         }));
-        res.json(convertedListings);
+
+        // Send back the listings and the total count
+        res.json({ totalCount, listings: convertedListings });
     } catch (error) {
         console.error('Error searching for listings:', error);
         res.status(500).json({ error: 'Error searching for listings' });
@@ -93,53 +98,45 @@ app.post('/api/listings/search', async (req, res) => {
 //INSERT EXPRESS ROUTE FOR BOOKINGS HERE
 // Endpoint to handle booking submission
 app.post('/api/bookings', async (req, res) => {
+    const { listingId, booking } = req.body;
+
     try {
-        // Destructure fields from request body
-        const {
-            listingId, // The ID of the listing being booked
-            guestName, // Name of the guest
-            checkInDate, // Check-in date
-            checkOutDate, // Check-out date
-            numberOfGuests, // Total number of guests
-            specialRequests // Any special requests from the guest
-        } = req.body;
+        await db.collection('listingsAndReviews').aggregate([
+            { $match: { _id: listingId } },
+            {
+                $addFields: {
+                    bookings: {
+                        $cond: {
+                            if: { $gt: [{ $size: { $ifNull: ["$bookings", []] } }, 0] },
+                            then: "$bookings",
+                            else: []
+                        }
+                    }
+                }
+            },
+            {
+                $set: {
+                    bookings: {
+                        $concatArrays: ["$bookings", [booking]]
+                    }
+                }
+            },
+            {
+                $merge: {
+                    into: "listingsAndReviews",
+                    whenMatched: "replace",
+                    whenNotMatched: "fail"
+                }
+            }
+        ]).toArray();
 
-        // Validate that listingId is present
-        if (!listingId) {
-            return res.status(400).json({ error: 'Listing ID is required' });
-        }
-
-        // Create booking data object
-        const bookingData = {
-            guestName,
-            checkInDate,
-            checkOutDate,
-            numberOfGuests,
-            specialRequests,
-            createdAt: new Date() // Timestamp when the booking was made
-        };
-
-        // Update the listingsAndReviews collection by pushing booking data to the bookings array
-        const result = await db.collection('listingsAndReviews').updateOne(
-            { _id: ObjectId(listingId) }, // Use the provided listingId
-            { $push: { bookings: bookingData } } // Push booking data to the bookings array
-        );
-
-        // Check if the listing was found and updated
-        if (result.modifiedCount === 0) {
-            return res.status(404).json({ error: 'Listing not found or booking not added' });
-        }
-
-        // Send response with the inserted booking details
-        res.status(201).json({
-            message: 'Booking created successfully',
-            bookingData: bookingData,
-        });
+        res.status(200).json({ message: 'Booking added successfully.' });
     } catch (error) {
-        console.error('Error creating booking:', error);
-        res.status(500).json({ error: 'Error creating booking' });
+        console.error('Error adding booking:', error);
+        res.status(500).json({ error: 'Error adding booking.' });
     }
 });
+
 
 // Start the server
 app.listen(PORT, () => {

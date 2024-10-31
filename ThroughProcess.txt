@@ -1,8 +1,6 @@
 1. Install the Pacakages
 npm install express 
 npm install mongodb 
-npm install body-parser 
-npm install nodemon -g 
 npm install express mongodb dotenv
 
 
@@ -33,3 +31,5 @@ Issues encountered
 ObjectObject: https://www.w3schools.com/jsref/jsref_map.asp
 Convert date into IS0 8601: https://www.w3schools.com/jsref/jsref_toisostring.asp
 The listing_ID is an objectID but on client it is a string.
+- stringigfy 
+

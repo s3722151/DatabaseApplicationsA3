@@ -1,15 +1,12 @@
 /* https: //www.w3schools.com/html/html_css.asp */
 header {
     text-align: center;
-    /* Centers the content horizontally */
     padding-left: 20px;
-    /* Adjust the padding as needed */
     padding-right: 20px;
-    /* Adjust the padding as needed */
-    background-color: rgb(255, 99, 71);
+    background-color: #FF385C;
 }
 
-/* https: //www.w3schools.com/css/tryit.asp?filename=trycss_navbar_horizontal_dividers */
+/* Navigation Bar */
 ul {
     list-style-type: none;
     margin: 0;
@@ -40,110 +37,167 @@ li a:hover:not(.active) {
 }
 
 .active {
-    background-color: #04AA6D;
+    background-color: #FF385C;
 }
 
+/* Body */
+body {
+    background-color: white;
+    /* Ensures the body remains white */
+}
 
-/*-------------------------- BODY ------------------------------------------- */
 h1 {
     color: black;
-    /* Sets the text color to blue */
     font-family: verdana;
-    /* Uses Verdana font */
-    font-size: 300%;
-    /* Sets the font size to 300% */
+    font-size: 3rem;
+    /* Larger text size */
 }
 
+h2 {
+    color: black;
+    font-family: verdana;
+    font-size: 2rem;
+    /* Larger text size */
+}
 
-/* 
-HOMEPAGE - DROPDOWN
-*/
+/* Top Section */
 .topSection {
     color: black;
     font-family: verdana;
-    font-size: 100%;
-    background-color: grey;
-    /* Adjust or remove fixed height */
-    height: auto;
-    /* Allow it to expand as needed */
+    font-size: 1.2rem;
+    /* Larger text size */
+    background-color: #FFB6C1;
+    /* Light pink that complements #FF385C */
+    border-radius: 15px;
+    /* Rounded edges */
     padding: 50px;
-    margin: 20px 40px 20px 40px;
+    margin: 20px 40px;
 }
 
-
-/* HOMEPAGE - DISPLAY RANDOM LISTINGS */
+/* Bottom Section */
 .bottomSection {
     color: black;
     font-family: verdana;
-    font-size: 100%;
-    background-color: grey;
-    /* Remove or adjust the fixed height */
-    height: auto;
-    /* Adjust as needed, or use max-height instead */
-    padding: 50px 50px 50px 50px;
-    margin: 20px 40px 20px 40px;
-    /* Ensure scrolling if content exceeds visible area */
+    font-size: 1.2rem;
+    /* Larger text size */
+    background-color: #FFB6C1;
+    /* Light pink that complements #FF385C */
+    border-radius: 15px;
+    /* Rounded edges */
+    padding: 50px;
+    margin: 20px 40px;
     overflow-y: auto;
     max-height: 40em;
-    /* Set a maximum height if needed */
 }
-        .listing-container {
-            border: 1px solid #ccc;
-            /* Adds a light gray border */
-            border-radius: 8px;
-            /* Rounded corners */
-            padding: 16px;
-            /* Space inside the box */
-            margin: 10px 0;
-            /* Space between listings */
-            background-color: #f9f9f9;
-            /* Light background color */
-            transition: box-shadow 0.3s;
-            /* Smooth transition for hover effect */
-        }
-    
-        .listing-container:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            /* Shadow on hover */
-        }
-    
-        .listing-link {
-            font-weight: bold;
-            /* Make the listing name bold */
-            color: darkred;
-            /* Bootstrap primary color */
-            text-decoration: none;
-            /* Remove underline */
-        }
-    
-        .listing-link:hover {
-            text-decoration: underline;
-            /* Underline on hover */
-        }
-    
-        p {
-            margin: 8px 0;
-            /* Space between paragraphs */
-        }
-    
-        .daily-rate {
-            color: #28a745;
-            /* Green color for the price */
-            font-weight: bold;
-            /* Make the price bold */
-        }
-    
-        .customer-rating {
-            color: #ffc107;
-            /* Yellow color for ratings */
-        }
 
+/* Listing Container */
+.listing-container {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 10px 0;
+    background-color: #f9f9f9;
+    transition: box-shadow 0.3s;
+}
+
+.listing-container:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.listing-link {
+    font-weight: bold;
+    color: darkred;
+    text-decoration: none;
+}
+
+.listing-link:hover {
+    text-decoration: underline;
+}
+
+p {
+    margin: 8px 0;
+}
+
+.daily-rate {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.customer-rating {
+    color: #ffc107;
+}
 
 /* Form */
 label {
     width: 60%;
+    font-size: 1.2rem;
+    /* Larger text size */
 }
-input{
-    width: 10%;
-    height:1.4em;
+
+input {
+    width: 100%;
+    /* Full width for better usability */
+    height: 2.5em;
+    /* Taller input */
+    font-size: 1.2rem;
+    /* Larger text size */
+    padding: 10px;
+    /* Padding for comfort */
+    border-radius: 8px;
+    /* Rounded edges */
+    border: 1px solid #ccc;
+    /* Light gray border */
+}
+input,
+select {
+    /* Apply styles to both input fields and dropdowns */
+    width: 100%;
+    /* Full width for better usability */
+    height: 2.5em;
+    /* Taller input and dropdown */
+    font-size: 1.2rem;
+    /* Larger text size */
+    padding: 10px;
+    /* Padding for comfort */
+    border-radius: 8px;
+    /* Rounded edges */
+    border: 1px solid #ccc;
+    /* Light gray border */
+}
+
+/* Button */
+button {
+    background-color: #FF385C;
+    /* Button color matching header */
+    color: white;
+    /* Text color */
+    font-size: 1.5rem;
+    /* Larger text size */
+    padding: 10px 20px;
+    /* Padding for button */
+    border: none;
+    /* No border */
+    border-radius: 25px;
+    /* Rounded edges */
+    cursor: pointer;
+    /* Pointer on hover */
+}
+
+button:hover {
+    background-color: #e03e52;
+    /* Slightly darker on hover */
+}
+
+/* Make validation error messages bold */
+#checkInValidation,
+#checkOutValidation,
+#nameValidation,
+#emailValidation,
+#daytimePhoneValidation,
+#mobileValidation,
+#postalAddressValidation,
+#residentialAddressValidation {
+    font-weight: bold;
+    color: red;
+    /* Optional: Change text color to red for visibility */
 }

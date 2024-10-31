@@ -10,28 +10,33 @@
 
 <body>
     <header>
-        <h1>Booking Confirmation</h1>
+        <h1>AirBnb</h1>
+        <h2>Booking Confirmation</h2>
     </header>
 
-    <section="topSection">
+    <section class="topSection">
         <div id="confirmationDetails"></div>
-        <a href="index.html">Return to Homepage</a>
+        <a href="index.html"  onclick="sessionStorage.clear()">Return to Homepage</a>
     </section>
 
     <script>
         // Retrieve booking details from sessionStorage
-        document.addEventListener('DOMContentLoaded', () => {
-            const bookingDetails = JSON.parse(sessionStorage.getItem('bookingDetails'));
-            if (bookingDetails) {
-                document.getElementById('confirmationDetails').innerHTML = `
-                    <h3>Your Booking:</h3>
-                    <p><strong>Name:</strong> ${bookingDetails.client.name}</p>
-                    <p><strong>Email:</strong> ${bookingDetails.client.email}</p>
-                    <p><strong>Arrival:</strong> ${bookingDetails.arrival_date}</p>
-                    <p><strong>Departure:</strong> ${bookingDetails.departure_date}</p>
-                `;
-            }
-        });
+        const bookingConfirmation = JSON.parse(sessionStorage.getItem('bookingConfirmation'));
+        const confirmationDetails = document.getElementById('confirmationDetails');
+
+        if (bookingConfirmation) {
+            confirmationDetails.innerHTML = `
+            <h3>Your Booking Details:</h3>
+            <p><strong>Listing Name:</strong> ${bookingConfirmation.listingName}</p>
+            <p><strong>Booking ID:</strong> ${bookingConfirmation.booking_id}</p>
+            <p><strong>Arrival Date:</strong> ${bookingConfirmation.arrival_date}</p>
+            <p><strong>Departure Date:</strong> ${bookingConfirmation.departure_date}</p>
+            <p><strong>Client Name:</strong> ${bookingConfirmation.client_name}</p>
+            <p><strong>Client Email:</strong> ${bookingConfirmation.client_email}</p>
+            `;
+        } else {
+            confirmationDetails.innerHTML = '<p>Booking details not available.</p>';
+        }
     </script>
 </body>
 
