@@ -51,6 +51,7 @@ function renderListings(listings, totalCount, isRandom = false) {
         return;
     }
 
+    //Turnary operator
     const listingCount = isRandom
         ? 'Random Listings'
         : `${totalCount} listings match your preferences`; // Use totalCount for accurate display
