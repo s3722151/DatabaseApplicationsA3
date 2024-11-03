@@ -122,11 +122,11 @@ document.getElementById('bookingForm').addEventListener('submit', function (even
     // Postal and Residential address validation (street, suburb, state format)
     const addressPattern = /^\d+\s+[a-zA-Z\s]+,\s+[a-zA-Z\s]+,\s+[a-zA-Z\s]+$/;
     if (!addressPattern.test(postalAddress)) {
-        document.getElementById('postalAddressValidation').textContent = "Please enter postal address in the format: 'Street Address, Suburb, State'.";
+        document.getElementById('postalAddressValidation').textContent = "Please enter postal address in the format: '10 Street Address, Suburb, State'.";
         isValid = false;
     }
     if (!addressPattern.test(residentialAddress)) {
-        document.getElementById('residentialAddressValidation').textContent = "Please enter residential address in the format: 'Street Address, Suburb, State'.";
+        document.getElementById('residentialAddressValidation').textContent = "Please enter residential address in the format: '10 Street Address, Suburb, State'.";
         isValid = false;
     }
 
